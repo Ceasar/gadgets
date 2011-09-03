@@ -6,20 +6,19 @@ from swap import swap
 
 class Table(object):
     '''A CSV backed SQL table.'''
-    @apply
-    def fieldnames():
-        def fget(self):
-            with open(self.filename) as f:
-                return csv.DictReader(f).fieldnames
+    @property
+    def fieldnames(self):
+        with open(self.filename) as f:
+            return csv.DictReader(f).fieldnames
 
-        def fset(self, fieldnames):
-            with open(self.filename, 'w') as f:
-                dr = csv.reader(f)
-                dw = csv.DictWriter(f, fieldnames=fieldnames)
-                dw.writerow(dict((field, field) for field in fieldnames))
-                for row in self:
-                    dw.writerow(row)
-        return property(**locals())
+    @property.setter
+    def fieldnames(self, fieldnames):
+        with open(self.filename, 'w') as f:
+            dr = csv.reader(f)
+            dw = csv.DictWriter(f, fieldnames=fieldnames)
+            dw.writerow(dict((field, field) for field in fieldnames))
+            for row in self:
+                dw.writerow(row)
     
     def __init__(self, filename, fieldnames=None):
         self.filename = filename
