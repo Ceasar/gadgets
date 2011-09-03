@@ -1,7 +1,8 @@
 '''A SQL table representation.'''
 import csv
-import os
-import shutil
+
+from swap import swap
+
 
 class Table(object):
     '''A CSV backed SQL table.'''
@@ -50,20 +51,23 @@ class Table(object):
         list to delete the row.'''
         #Unfortunately, one cannot just change a line.
         #Instead, one must completely rewrite the file with each change.
-        copy = CSV(self.filename + '~')
-        with open(self.filename, 'r') as f:
-            if as_dict:
-                reader = csv.DictReader(f)
-                copy.fieldnames = reader.fieldnames
-            else:
-                reader = csv.reader(f)
-                copy.fieldnames = reader.next()
-            for row in reader:
-                new = func(row)
-                #if new is None, don't write, effectively enabling deletion
-                if new: copy.append(new)
-        shutil.copyfile(copy.filename, self.filename)
-        os.remove(copy.filename)
+        with swap(self.filename) as swp:
+            with open(self.filename) as f:
+                if as_dict:
+                    reader = csv.DictReader(f)
+                    writer = csv.DictWriter(swp)
+                    fieldnames = reader.fieldnames
+                else:
+                    reader = csv.reader(f)
+                    writer = csv.writer(swp)
+                    try:
+                        fieldnames = reader.next()
+                    except:
+                        fieldnames = ''
+                writer.writerow(fieldnames)
+                for row in reader:
+                    updated = func(row)
+                    if updated: writer.writerow(updated)
 
     def append(self, row):
         '''Append a row to the end of the file.'''
