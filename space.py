@@ -1,5 +1,6 @@
 from itertools import product
 
+from vector import Vector
 
 class Matrix(list):
   '''A null matrix of specified dimensions.
@@ -35,4 +36,4 @@ class Space(dict):
   '''
   def __init__(self, dimensions, default=0):
     for point in product(*[range(d) for d in dimensions]):
-      self[point] = default
+      self[Vector(point)] = default
