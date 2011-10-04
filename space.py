@@ -34,6 +34,6 @@ class Space(dict):
   >>> s
   {(0, 1, 1): [], (1, 1, 0): [], (1, 0, 0): [], (0, 0, 1): [], (1, 0, 1): [], (0, 0, 0): [], (0, 1, 0): [], (1, 1, 1): []}
   '''
-  def __init__(self, dimensions, default=0):
+  def __init__(self, dimensions, default=int):
     for point in product(*[range(d) for d in dimensions]):
-      self[Vector(point)] = default
+      self[Vector(point)] = default()
