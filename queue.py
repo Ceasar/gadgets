@@ -30,19 +30,42 @@ class queue(object):
       self.last = None
     return popped
 
+  def remove(self, item):
+    """Remove an item from the queue. Raises a ValueError if item is not in queue."""
+    assert item in self.successors or item is self.head, ValueError("item not in queue")
+    if self.head == item:
+      self.pop()
+    else:
+      predecessor = self.head
+      while self.successors[predecessor] != item:
+        predecessor = self.successors[predecessor]
+      self.successors[predecessor] = self.successors.pop(item)
+
+  def __len__(self):
+    return len(self.successors) + (not self.empty)
+
 
 def _test():
   q = queue()
   q.push(0)
   q.push(1)
   q.push(3)
-  print q.head, q.last, q.successors
   assert q.pop() == 0
-  print q.head, q.last, q.successors
   assert q.pop() == 1
-  print q.head, q.last, q.successors
   assert q.pop() == 3
-  print q.head, q.last, q.successors
+
+  q.push(2)
+  q.push(4)
+  q.remove(2)
+  assert q.pop() == 4
+
+  q.push(2)
+  q.push(4)
+  q.push(5)
+  q.remove(4)
+  assert q.pop() == 2
+  assert q.pop() == 5
+
   print "success"
 
 
