@@ -1,20 +1,22 @@
-'''
-A specialized tree-based data structure that satisfies the heap property.
-
-A heap can be used as priority queue by pushing tuples onto the heap.
-'''
-
+"""
+A collection of data structures that emulate a hierarchal tree structure
+with a set of linked nodes.
+"""
 import heapq
     
 
 class heap(object):
-    '''A specialized data structure that satisfies the heap property.'''
+    '''
+    A specialized tree-based data structure that satisfies the heap property.
+
+    A heap can be used as priority queue by pushing tuples onto the heap.
+    '''
     def __init__(self, iterable=None):
         if iterable is None:
             self._heap = []
         else:
             self._heap = list(iterable)
-        heapq.heapify(self._heap)
+          heapq.heapify(self._heap)
 
     def _immutable(self, func, *args):
         '''Checks if the argument is immutable in order to ensure integrity
@@ -74,3 +76,16 @@ class heap(object):
         while self._heap:
             yield self.pop()
 
+
+class RecursiveDict(dict):
+    '''
+    A recursive defaultdict.
+
+    >>> a = RecursiveDict()
+    >>> a[1][2][3] = 4
+    >>> dict(a)
+    {1: {2: {3: 4}}}
+    '''
+    def __missing__(self, key):
+        value = self[key] = type(self)()
+        return value
