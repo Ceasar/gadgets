@@ -16,7 +16,7 @@ class heap(object):
             self._heap = []
         else:
             self._heap = list(iterable)
-          heapq.heapify(self._heap)
+            heapq.heapify(self._heap)
 
     def _immutable(self, func, *args):
         '''Checks if the argument is immutable in order to ensure integrity
