@@ -13,7 +13,7 @@ class queue(object):
     return self.head is None
 
   def push(self, item):
-    """Append an item to the end of the queue."""
+    '''Q.push(object) -- push object on back of queue.'''
     if self.empty:
       self.head = item
     else:
@@ -21,8 +21,11 @@ class queue(object):
     self._last = item
 
   def pop(self):
-    """Return and remove the item in the front of the queue."""
-    assert not self.empty, "pop from empty queue"
+    '''
+    Q.pop() -> item -- remove and return first item.
+    Raises IndexError if queue is empty.
+    '''
+    assert not self.empty, IndexError("pop from empty queue")
     popped = self.head
     try:
       self.head = self._successors.pop(self.head)
@@ -32,7 +35,8 @@ class queue(object):
     return popped
 
   def remove(self, item):
-    """Remove an item from the queue. Raises a ValueError if item is not in queue."""
+    """Q.remove(value) -- remove first occurence of value.
+    Raises a ValueError if item is not present."""
     assert item in self._successors or item == self._last, ValueError("item not in queue")
     if self.head == item:
       self.pop()
@@ -72,9 +76,9 @@ class stack(object):
   def pop(self):
     '''
     S.pop() -> item -- remove and return top item.
-    Raised IndexError if stack is empty.
+    Raises IndexError if stack is empty.
     '''
-    assert not self.empty, "pop from empty queue"
+    assert not self.empty, IndexError("pop from empty queue")
     popped = self.head
     self.head = self._predecessors.pop(self.head)
     return popped
