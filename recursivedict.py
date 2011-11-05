@@ -7,8 +7,6 @@ class RecursiveDict(dict):
 
     >>> a = RecursiveDict()
     >>> a[1][2][3] = 4
-    >>> a.dictify()
-    {1: {2: {3: 4}}}
     >>> dict(a)
     {1: {2: {3: 4}}}
     '''
