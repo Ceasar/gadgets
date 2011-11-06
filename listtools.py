@@ -1,3 +1,6 @@
+"""A collection of functions for manipulating iterables."""
+
+flatten = lambda *x: sum(x, [])
 
 def divide(list_, k):
   '''Slice a list into pieces of length-k.
