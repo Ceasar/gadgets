@@ -45,7 +45,7 @@ class heap(object):
         '''
         return self._immutable(heapq.heappush, self._heap, item)
 
-    def pushpop(self, item):
+    def _pushpop(self, item):
         '''
         Push item on the heap, then pop and return the smallest item from
         the heap.
@@ -54,7 +54,7 @@ class heap(object):
         followed by a separate called to heappop().'''
         return self._immutable(heapq.heappushpop, self._heap, item)
 
-    def poppush(self, item):
+    def _poppush(self, item):
         '''
         Pop and return the smallest item from the heap, then push item on
         the heap.
