@@ -1,57 +1,42 @@
 """A collection of abstract data types."""
-from collections import Counter as multiset
+from collections import deque
 
+"""While a deque can do anything a queue can do and more, by limiting the
+the number of available actions we achieve two things:
+  * It becomes semantically clear how we intend to use a data-structure.
+  * We can strengthen the invariants.
+A similiar argument can be made for using a stack in place of a list.
+"""
 
 class queue(object):
+  """A first-in first-out data structure.
+  A queue is guaranteed to always have at least 0 elements,
+  and to always maintain the first-in first-out property."""
   def __init__(self):
-    self.head = None
-    self._last = None
-    self._successors = {}
+    self._items = deque()
+
+  @property
+  def top(self):
+    return self._items[0]
 
   @property
   def empty(self):
-    return self.head is None
+    return len(self) == 0
 
   def push(self, item):
     '''Q.push(object) -- push object on back of queue.'''
-    if self.empty:
-      self.head = item
-    else:
-      self._successors[self._last] = item
-    self._last = item
+    self._items.append(item)
 
   def pop(self):
-    '''
-    Q.pop() -> item -- remove and return first item.
-    Raises IndexError if queue is empty.
-    '''
-    assert not self.empty, IndexError("pop from empty queue")
-    popped = self.head
+    '''Q.pop() -> item -- remove and return first item.
+    Raises IndexError if queue is empty.'''
     try:
-      self.head = self._successors.pop(self.head)
-    except KeyError:
-      self.head = None
-      self._last = None
-    return popped
-
-  def remove(self, item):
-    """Q.remove(value) -- remove first occurence of value.
-    Raises a ValueError if item is not present."""
-    assert item in self._successors or item == self._last, ValueError("item not in queue")
-    if self.head == item:
-      self.pop()
-    else:
-      predecessor = self.head
-      while self._successors[predecessor] != item:
-        predecessor = self._successors[predecessor]
-      if self._last == item:
-        del self._successors[predecessor]
-        self._last = predecessor
-      else:
-        self._successors[predecessor] = self._successors.pop(item)
+      return self._items.popleft()
+    except IndexError:
+      raise IndexError("pop from empty queue")
 
   def __len__(self):
-    return len(self._successors) + (not self.empty)
+    return len(self._items)
 
   def __iter__(self):
     while not self.empty:
@@ -59,32 +44,35 @@ class queue(object):
 
 
 class stack(object):
-  '''A stack object, supporting push and pop implementations.'''
-
+  """A first-in last-out data structure.
+  A stack is guaranteed to always have at least 0 elements,
+  and to always maintain the first-in first-out property."""
   def __init__(self):
-    self.head = None
-    self._predecessors = {}
+    self._items = []
+
+  @property
+  def top(self):
+    return self._items[-1]
 
   @property
   def empty(self):
-    return self.head is None
+    return len(self) == 0
 
   def push(self, item):
     '''S.push(object) -- push object on top.'''
-    self._predecessors[item], self.head = self.head, item 
+    self._items.append(item)
 
   def pop(self):
-    '''
-    S.pop() -> item -- remove and return top item.
+    '''S.pop() -> item -- remove and return top item.
     Raises IndexError if stack is empty.
     '''
-    assert not self.empty, IndexError("pop from empty queue")
-    popped = self.head
-    self.head = self._predecessors.pop(self.head)
-    return popped
-  
+    try:
+      return self._items.pop()
+    except IndexError:
+      raise IndexError("pop from empty stack")
+
   def __len__(self):
-    return len(self._predecessors)
+    return len(self._items)
 
   def __iter__(self):
     while not self.empty:
