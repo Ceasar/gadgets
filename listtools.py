@@ -2,6 +2,8 @@
 
 flatten = lambda *x: sum(x, [])
 
+splice = lambda x, i, y: x[:i] + y + x[i:] 
+
 def divide(list_, k):
   '''Slice a list into pieces of length-k.
 
