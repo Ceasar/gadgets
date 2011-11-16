@@ -3,7 +3,7 @@ from __future__ import division
 from collections import defaultdict
 
 
-def rank(g, accept=1e-3):
+def rank(g, d=0.15, accept=1e-3):
   """Performs an iterative algorithm on a graph to assess the influence of each node.
   
   >>> edges = set([(1, 2), (1, 3), (2, 4), (3, 1), (3, 4), (3, 5), (5, 1), (5, 4)]) 
@@ -11,7 +11,6 @@ def rank(g, accept=1e-3):
   >>> rank(g)
   [(4, 0.5789168557971544), (1, 0.3313874448771381), (2, 0.2909555159840314), (3, 0.2909555159840314), (5, 0.2325098036400054)]
   """
-  d = 0.15
   vertices, edges = g
 
   def B(i):
@@ -32,7 +31,7 @@ def rank(g, accept=1e-3):
   k = 0
   while True:
     for v in vertices:
-      r[k+1][v] = d + (1 - d) * sum(1 / len(set(N(j))) * r[k][j] for j in B(v))
+      r[k+1][v] = d + (1 - d) * sum(1 / len(set(N(f))) * r[k][f] for f in B(v))
     k += 1
     if all(abs(r[k][v] - r[k-1][v]) < accept for v in vertices):
       break
