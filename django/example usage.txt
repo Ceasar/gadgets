@@ -1,0 +1,19 @@
+class BaseWidgetModelAdmin(ChangeList, Restricted, LWModelAdmin):
+    parent = None
+    cls_display = ('id', 'get_category', 'title', 'description',)
+    cls_editable = ('title', 'description',)
+
+    declared_fieldsets = None
+    cls_fieldsets = (('Widget', { 'fields': ('title', 'description',) }),)
+    cls_restricted = (('Merchant', {'fields': ('merchant',) }),)
+
+    search_fields = ('id', 'title', 'description',)
+
+    def changelist_view(self, request, extra_context=None):
+        ChangeList.changelist_view(self, request, extra_context)
+        self.list_display_links = ('id',)
+        if request.user.is_superuser:
+            self.list_display += ('merchant',)
+        return super(BaseWidgetModelAdmin, self).changelist_view(request, extra_context)
+
+    inlines = [CategoryInline, RatingInline]
