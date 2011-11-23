@@ -5,75 +5,49 @@ with a set of linked nodes.
 import heapq
     
 
+#TODO: add a __contains__ method if possible, or just use a sorted list with bisect
 class heap(object):
-    '''
-    A specialized tree-based data structure that satisfies the heap property.
+    '''A tree-based data structure that satisfies the heap property.
 
     A heap can be used as priority queue by pushing tuples onto the heap.
     '''
-    def __init__(self, iterable=None):
-        if iterable is None:
-            self._heap = []
-        else:
-            self._heap = list(iterable)
-            heapq.heapify(self._heap)
+    def __init__(self, items):
+        self._items = list(items)
+        heapq.heapify(self._items)
 
-    def _immutable(self, func, *args):
-        '''Checks if the argument is immutable in order to ensure integrity
-        of the heap. Raises TypeError if the argument is mutable.
+    @property
+    def top(self):
+        return self._items[0]
 
-        Note that there is no way to ensure an object is in fact immutable
-        in Python. This function checks if the arguments are hashable and
-        assumes that the arguments behave nicely.'''
-        try:
-            hash(args[-1])
-        except TypeError as e:
-            raise e
-        else:
-            func(*args)
+    @property
+    def empty(self):
+        return len(self) == 0
 
     def pop(self):
-        '''
-        Pop and return the smallest item from the heap, maintaining the heap
+        '''Pop and return the smallest item from the heap, maintaining the heap
         invariant. If the heap is empty, IndexError is raised.
         '''
-        return heapq.heappop(self._heap)
+        try:
+          return heapq.heappop(self._items)
+        except IndexError as e:
+          raise e
 
     def push(self, item):
+        '''Push the value item onto the heap, maintaining the heap invariant.
+        If the item is not hashable, a TypeError is raised.
         '''
-        Push the value item onto the heap, maintaining the heap invariant.
-        '''
-        return self._immutable(heapq.heappush, self._heap, item)
-
-    def _pushpop(self, item):
-        '''
-        Push item on the heap, then pop and return the smallest item from
-        the heap.
-
-        The combined actions runs more efficiently than heappush()
-        followed by a separate called to heappop().'''
-        return self._immutable(heapq.heappushpop, self._heap, item)
-
-    def _poppush(self, item):
-        '''
-        Pop and return the smallest item from the heap, then push item on
-        the heap.
-
-        The combined actions runs more efficiently than heappop()
-        followed by a separate called to heappush().'''
-        return self._immutable(heapq.heapreplace, self._heap, item)
-
-    def __setitem__(self, i, y):
-        def setitem(i, y):
-            self._heap[self._heap.index(i)] = y
-            heapq.heapify(self._heap)
-        self._immutable(setitem, i, y)
+        try:
+          hash(item)
+        except TypeError as e:
+          raise e
+        else:
+          heapq.heappush(self._items, item)
 
     def __len__(self):
-        return len(self._heap)
+        return len(self._items)
 
     def __iter__(self):
-        while self._heap:
+        while len(self) > 0:
             yield self.pop()
 
 
