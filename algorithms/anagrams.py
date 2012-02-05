@@ -1,17 +1,17 @@
-from collections import defaultdict
+from collections import defaultdict, Counter
 
 
 def anagrams(words):
   """
   Find all the anagrams in a list of words.
 
-  >>> words = ['kinship', 'pinkish', 'boaster', 'boaters', 'borates']
+  >>> words = ['bon', 'boon', 'bono', 'nob']
   >>> anagrams(words)
-  [['kinship', 'pinkish'], ['boaster', 'boaters', 'borates']]
+  [['boon', 'bono'], ['bon', 'nob']]
   """
   anagrams = defaultdict(list)
   for word in words:
-    anagrams[frozenset(word)].append(word)
+    anagrams[tuple(Counter(word).iteritems())].append(word)
   return anagrams.values()
 
 if __name__ == "__main__":
