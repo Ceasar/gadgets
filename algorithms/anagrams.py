@@ -1,4 +1,4 @@
-from collections import defaultdict, Counter
+from collections import defaultdict
 
 
 def anagrams(words):
@@ -7,11 +7,11 @@ def anagrams(words):
 
   >>> words = ['kinship', 'pinkish', 'boaster', 'boaters', 'borates']
   >>> anagrams(words)
-  [['boaster', 'boaters', 'borates'], ['kinship', 'pinkish']]
+  [['kinship', 'pinkish'], ['boaster', 'boaters', 'borates']]
   """
   anagrams = defaultdict(list)
   for word in words:
-    anagrams[tuple(Counter(word).items())].append(word)
+    anagrams[frozenset(word)].append(word)
   return anagrams.values()
 
 if __name__ == "__main__":
