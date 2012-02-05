@@ -11,7 +11,7 @@ def anagrams(words):
   """
   anagrams = defaultdict(list)
   for word in words:
-    anagrams[frozendict(Counter(word))].append(word)
+    anagrams[tuple(Counter(word).items())].append(word)
   return anagrams.values()
 
 if __name__ == "__main__":
