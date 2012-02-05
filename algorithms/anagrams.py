@@ -7,7 +7,7 @@ def anagrams(words):
 
   >>> words = ['kinship', 'pinkish', 'boaster', 'boaters', 'borates']
   >>> anagrams(words)
-  [['kinship', 'pinkish'], ['boaster', 'boaters', 'borates']]
+  [['boaster', 'boaters', 'borates'], ['kinship', 'pinkish']]
   """
   anagrams = defaultdict(list)
   for word in words:
