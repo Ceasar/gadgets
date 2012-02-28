@@ -58,6 +58,10 @@ class stack(object):
   def empty(self):
     return len(self) == 0
 
+  def item_at(self, pos):
+    """Get the item at pos in the stack."""
+    return self._items[pos]
+
   def push(self, item):
     '''S.push(object) -- push object on top.'''
     self._items.append(item)
@@ -73,7 +77,3 @@ class stack(object):
 
   def __len__(self):
     return len(self._items)
-
-  def __iter__(self):
-    while not self.empty:
-      yield self.pop()
